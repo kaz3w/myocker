@@ -2,7 +2,8 @@
 
 set -xeu
 
-architecture=$(dpkg --print-architecture)
+# architecture=$(dpkg --print-architecture)
+architecture=amd64
 
 if [ "$architecture" = "armhf" ]; then
   apt-get install -y --no-install-recommends \
