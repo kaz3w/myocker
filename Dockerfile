@@ -5,6 +5,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 COPY ./helper_script_for_armhf.sh /helper_script_for_armhf.sh
 RUN /helper_script_for_armhf.sh
 
+
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	debian-keyring \
@@ -14,7 +15,6 @@ RUN apt-get update \
 	diffstat \
 	unzip \
 	texinfo \
-	gcc-multilib \
 	build-essential \
 	chrpath \
 	socat \

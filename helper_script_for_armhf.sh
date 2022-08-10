@@ -2,8 +2,12 @@
 
 set -xeu
 
-# architecture=$(dpkg --print-architecture)
-architecture=amd64
+architecture=$(dpkg --print-architecture)
+
+if [ "$architecture" = "amd64" ]; then
+  apt-get install -y --no-install-recommends \
+                                  gcc-multilib
+fi
 
 if [ "$architecture" = "armhf" ]; then
   apt-get install -y --no-install-recommends \
