@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 COPY ./helper_script_for_armhf.sh /helper_script_for_armhf.sh  # 細工部分
 RUN /helper_script_for_armhf.sh                                # 細工部分
