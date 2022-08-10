@@ -1,7 +1,9 @@
 FROM ubuntu:18.04
 
-COPY ./helper_script_for_armhf.sh /helper_script_for_armhf.sh  # 細工部分
-RUN /helper_script_for_armhf.sh                                # 細工部分
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
+COPY ./helper_script_for_armhf.sh /helper_script_for_armhf.sh
+RUN /helper_script_for_armhf.share
 
 COPY ./source_dir /source_dir
 
