@@ -7,9 +7,7 @@ architecture=$(dpkg --print-architecture)
 if [ "$architecture" = "amd64" ]; then
   apt-get install -y --no-install-recommends \
                                   gcc-multilib
-fi
-
-if [ "$architecture" = "armhf" ]; then
+elif [ "$architecture" = "armhf" ]; then
   apt-get install -y --no-install-recommends \
                                   apt-transport-https \
                                   ca-certificates \
