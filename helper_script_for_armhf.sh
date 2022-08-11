@@ -4,10 +4,11 @@ set -xeu
 
 architecture=$(dpkg --print-architecture)
 
-if [ "$architecture" = "amd64" ]; then
-  apt-get install -y --no-install-recommends \
-                                  gcc-multilib
-elif [ "$architecture" = "armhf" ]; then
+# if [ "$architecture" = "amd64" ]; then
+#   apt-get install -y gcc-multilib
+# fi
+
+if [ "$architecture" = "armhf" ]; then
   apt-get install -y --no-install-recommends \
                                   apt-transport-https \
                                   ca-certificates \
