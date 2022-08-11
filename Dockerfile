@@ -40,7 +40,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	apt-file \
 	curl \
 	vim \
-	vim-bitbake \
 	tree \
 	sudo \
 	locales-all \
