@@ -5,7 +5,7 @@ set -xeu
 architecture=$(dpkg --print-architecture)
 
 # if [ "$architecture" = "amd64" ]; then
-#   apt-get install -y gcc-multilib
+#   apt-get install -y gcc-multilib lib32ncurses5-dev
 # fi
 
 if [ "$architecture" = "armhf" ]; then
