@@ -1,0 +1,11 @@
+#!/usr/bin/env expect
+
+spawn ./cmake-3.24.0-linux-x86_64.sh
+
+
+expect {
+    "More" { send "\n"; exp_continue; }
+    "Do you accept the license? \\\[yn\\\]:" { send "y\n"; exp_continue; }
+    "Saying no will install in: \"/home/katsumi/Downloads\" \\\[Yn\\\]:"  { send "Y\n";}
+}
+expect eof

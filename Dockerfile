@@ -31,7 +31,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	xterm \
 	wget \
 	build-essential \
-	cmake \
 	openssh-client \
 	supervisor \
 	expect \
@@ -54,8 +53,9 @@ RUN apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt-file update
 
+COPY cmake_bin_sh.exp .
 COPY ./helper_script_for_armhf.sh .
-RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
+RUN ["/bin/bash", "-c", "./cmake_bin_sh.exp"] 
 
 COPY ./source /source
 WORKDIR /source
