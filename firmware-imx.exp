@@ -1,0 +1,11 @@
+#!/usr/bin/env expect
+
+/home/build/imx-boot-bin/firmware-imx/firmware-imx-8.5.bin
+
+# --More--[Press space to continue, 'q' to quit.]
+
+expect {
+    "--More--\\\[Press space to continue, \'q\' to quit.\\\]" { send " "; exp_continue; }
+    "Do you accept the EULA you just read? (y/N)" { send "y\n"; }
+}
+expect eof
