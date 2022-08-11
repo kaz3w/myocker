@@ -20,7 +20,7 @@ if [ "$architecture" = "armhf" ]; then
   wget https://github.com/Kitware/CMake/releases/download/v3.24.0/cmake-3.24.0-linux-aarch64.sh && \
   chmod a+x ./cmake-3.24.0-linux-aarch64.sh && \
   ./cmake_bin_sh.exp && \
-  cp -rp cmake-3.24.0-linux-x86_64/* /usr/local
+  cp -rp cmake-3.24.0-linux-aarch64/* /usr/local
 
   # apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' && \
   # apt-get update && apt-get install -y cmake=3.19.2-0kitware1ubuntu18.04.1 \
