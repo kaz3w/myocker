@@ -125,14 +125,14 @@ RUN ["/bin/bash", "-c", "DISTRO='fsl-imx-wayland' MACHINE='imx8mmevk' LANG=en_US
 
 ## BUILD EVK-SDK
 ARG BUILD_SDK_TARGET="build_sdk"
-ARG BUILD_ROOT="${WSRC_ROOT}/${BUILD_SDK_TARGET}"
+ARG BUILD_ROOT="${SRC_ROOT}/${BUILD_SDK_TARGET}"
 
-RUN ["/bin/bash", "-c", "cd ${WSRC_ROOT}; source ./imx-setup-release.sh -b ./${BUILD_SDK_TARGET}"]
+RUN ["/bin/bash", "-c", "cd ${SRC_ROOT}; source ./imx-setup-release.sh -b ./${BUILD_SDK_TARGET}"]
 
-RUN echo 'BB_NUMBER_THREADS = "8"' >> ${WSRC_ROOT}/${BUILD_SDK_TARGET}/conf/local.conf \
- && echo 'PARALLEL_MAKE = "-j 8"' >> ${WSRC_ROOT}/${BUILD_SDK_TARGET}/conf/local.conf
+RUN echo 'BB_NUMBER_THREADS = "8"' >> ${SRC_ROOT}/${BUILD_SDK_TARGET}/conf/local.conf \
+ && echo 'PARALLEL_MAKE = "-j 8"' >> ${SRC_ROOT}/${BUILD_SDK_TARGET}/conf/local.conf
 
-RUN ["/bin/bash", "-c", "cd ${WSRC_ROOT}; source ./setup-environment ${BUILD_SDK_TARGET}; bitbake core-image-minimal -c populate_sdk"] 
+RUN ["/bin/bash", "-c", "cd ${SRC_ROOT}; source ./setup-environment ${BUILD_SDK_TARGET}; bitbake core-image-minimal -c populate_sdk"] 
 
 RUN cd ${BUILD_ROOT}/tmp/deploy/sdk \
  && echo | ./fsl-imx-wayland-glibc-x86_64-core-image-minimal-aarch64-imx8mmevk-toolchain-5.4-zeus.sh
