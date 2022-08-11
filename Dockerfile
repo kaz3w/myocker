@@ -57,8 +57,8 @@ COPY ./helper_script_for_armhf.sh .
 RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
 
 ## Build sample c project
-COPY ./source /source
 WORKDIR /source
+COPY ./source/ .
 RUN cmake .
 
 
