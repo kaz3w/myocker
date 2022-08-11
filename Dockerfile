@@ -2,11 +2,6 @@ FROM ubuntu:18.04
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-# WORKDIR /
-# COPY ./helper_script_for_armhf.sh .
-# RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
-
-
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	debian-keyring \
@@ -58,8 +53,11 @@ RUN apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt-file update
 
+COPY ./helper_script_for_armhf.sh .
+RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
 
-# COPY ./source /source
+COPY ./source /source
+WORKDIR /source
+RUN cmake .
 
-# WORKDIR /source
-# RUN cmake .
+
