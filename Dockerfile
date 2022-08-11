@@ -121,3 +121,93 @@ RUN ["/bin/bash", "-c", "cd ${SRC_ROOT}; LANG=en_US.UTF-8;source ./imx-setup-rel
 RUN echo 'BB_NUMBER_THREADS = "8"' >> ${SRC_ROOT}/${BUILD_TARGET}/conf/local.conf \
  && echo 'PARALLEL_MAKE = "-j 8"' >> ${SRC_ROOT}/${BUILD_TARGET}/conf/local.conf
 
+RUN ["/bin/bash", "-c", "DISTRO='fsl-imx-wayland' MACHINE='imx8mmevk' LANG=en_US.UTF-8 source ./setup-environment bitbake imx-image-core"]
+
+## BUILD EVK-SDK
+ARG BUILD_SDK_TARGET="build_sdk"
+ARG BUILD_ROOT="${WSRC_ROOT}/${BUILD_SDK_TARGET}"
+
+RUN ["/bin/bash", "-c", "cd ${WSRC_ROOT}; source ./imx-setup-release.sh -b ./${BUILD_SDK_TARGET}"]
+
+RUN echo 'BB_NUMBER_THREADS = "8"' >> ${WSRC_ROOT}/${BUILD_SDK_TARGET}/conf/local.conf \
+ && echo 'PARALLEL_MAKE = "-j 8"' >> ${WSRC_ROOT}/${BUILD_SDK_TARGET}/conf/local.conf
+
+RUN ["/bin/bash", "-c", "cd ${WSRC_ROOT}; source ./setup-environment ${BUILD_SDK_TARGET}; bitbake core-image-minimal -c populate_sdk"] 
+
+RUN cd ${BUILD_ROOT}/tmp/deploy/sdk \
+ && echo | ./fsl-imx-wayland-glibc-x86_64-core-image-minimal-aarch64-imx8mmevk-toolchain-5.4-zeus.sh
+
+ ## BUILD EVK-BOOTLOADER
+
+ARG BUILD_TARGET_BOOT="imx-boot-bin"
+ARG BUILD_ROOT__IMX_BOOT_BIN="/home/${USERNAME}/${BUILD_TARGET_BOOT}"
+ARG TARGET_UBOOT_IMX="uboot-imx"
+
+## U-BOOT
+WORKDIR ${BUILD_ROOT__IMX_BOOT_BIN}
+RUN git clone https://source.codeaurora.org/external/imx/${TARGET_UBOOT_IMX}.git
+
+WORKDIR ${TARGET_UBOOT_IMX}
+RUN git checkout -b imx_v2020.04_5.4.70_2.3.0 origin/imx_v2020.04_5.4.70_2.3.0 
+ENV ARCH=arm 
+
+RUN DEBIAN_FRONTEND=noninteractive \
+ && sudo apt-get install -y gcc-aarch64-linux-gnu 
+
+ENV CROSS_COMPILE=aarch64-linux-gnu-
+
+RUN ["/bin/bash", "-c", "ARCH=arm;cd ${BUILD_ROOT__IMX_BOOT_BIN}/${TARGET_UBOOT_IMX}; source /opt/fsl-imx-wayland/5.4-zeus/environment-setup-aarch64-poky-linux"]
+
+RUN ARCH=arm \
+ && make clean \
+ && make imx8mm_evk_defconfig \
+ && make -j8
+
+## Download and build the ARM Trusted Firmware
+ARG TARGET_IMX_ATF="imx-atf"
+WORKDIR ${BUILD_ROOT__IMX_BOOT_BIN}
+RUN git clone https://source.codeaurora.org/external/imx/${TARGET_IMX_ATF}.git
+
+WORKDIR  ${TARGET_IMX_ATF}
+RUN git checkout -b imx_5.4.70_2.3.0 origin/imx_5.4.70_2.3.0 \
+ && unset LDFLAGS \
+ && make -j8 PLAT=imx8mm bl31
+
+## LPDDR4 training binaries(Caribration)
+ARG TARGET_FIRMWARE_IMX="firmware-imx"
+WORKDIR ${BUILD_ROOT__IMX_BOOT_BIN}/${TARGET_FIRMWARE_IMX}
+
+RUN wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.5.bin \
+ && chmod a+x firmware-imx-8.5.bin
+
+COPY --chown=${USERNAME}:${USERNAME} /firmware-imx.exp .
+# RUN sudo chown ${USERNAME}:${USERNAME} firmware-imx.exp
+# RUN expect firmware-imx.exp
+# RUN ["/bin/bash", "-c", "cd ${BUILD_ROOT__IMX_BOOT_BIN}/${TARGET_FIRMWARE_IMX}; ./firmware-imx-8.5.bin; echo y"]
+# RUN find . > ${BUILD_ROOT__IMX_BOOT_BIN}/t.txt
+
+COPY --chown=${USERNAME}:${USERNAME} /firmware-imx-8.5/ firmware-imx-8.5
+
+
+# ## iMX mkimage
+ARG TARGET_IMX_MKIMAGE="imx-mkimage"
+WORKDIR ${BUILD_ROOT__IMX_BOOT_BIN}
+RUN git clone https://source.codeaurora.org/external/imx/${TARGET_IMX_MKIMAGE}.git
+
+WORKDIR ${BUILD_ROOT__IMX_BOOT_BIN}/${TARGET_IMX_MKIMAGE}
+RUN git checkout -b imx_5.4.70_2.3.0 origin/imx_5.4.70_2.3.0
+
+# ## copy files
+WORKDIR ${BUILD_ROOT__IMX_BOOT_BIN}/${TARGET_IMX_MKIMAGE}
+RUN cp ../${TARGET_UBOOT_IMX}/spl/u-boot-spl.bin iMX8M/
+RUN cp ../${TARGET_UBOOT_IMX}/u-boot-nodtb.bin iMX8M/
+RUN cp ../${TARGET_UBOOT_IMX}/arch/arm/dts/imx8mm-evk.dtb iMX8M/
+RUN cp ../${TARGET_IMX_ATF}/build/imx8mm/release/bl31.bin iMX8M/
+RUN cp ../${TARGET_FIRMWARE_IMX}/firmware-imx-8.5/firmware/ddr/synopsys/lpddr4_pmu_train_* iMX8M/
+RUN cp ../${TARGET_UBOOT_IMX}/tools/mkimage iMX8M/mkimage_uboot
+
+RUN DEBIAN_FRONTEND=noninteractive \
+ && sudo apt-get install -y device-tree-compiler 
+
+RUN make SOC=iMX8MM flash_evk
+
