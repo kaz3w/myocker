@@ -118,10 +118,7 @@ RUN echo 'BB_NUMBER_THREADS = "8"' >> ${SRC_ROOT}/${BUILD_TARGET}/conf/local.con
  && echo 'PARALLEL_MAKE = "-j 8"' >> ${SRC_ROOT}/${BUILD_TARGET}/conf/local.conf
 
 
-
-
-
-
+WORKDIR /usr/local/bin
 RUN set -x \
  && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
  && chmod a+x /usr/local/bin/repo
