@@ -4,6 +4,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+	gpg \
 	debian-keyring \
 	git-all \
 	gawk \

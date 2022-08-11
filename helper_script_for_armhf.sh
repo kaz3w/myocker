@@ -15,9 +15,13 @@ if [ "$architecture" = "armhf" ]; then
                                   gnupg \
                                   software-properties-common \
                                   wget
-  wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
-  apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' && \
-  apt-get update && apt-get install -y cmake=3.19.2-0kitware1ubuntu18.04.1 \
-                                       cmake-data=3.19.2-0kitware1ubuntu18.04.1
+
+  wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
+  wget https://github.com/Kitware/CMake/releases/download/v3.24.0/cmake-3.24.0-linux-aarch64.sh && \
+  ./cmake-3.24.0-linux-aarch64.sh
+
+  # apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' && \
+  # apt-get update && apt-get install -y cmake=3.19.2-0kitware1ubuntu18.04.1 \
+  #                                      cmake-data=3.19.2-0kitware1ubuntu18.04.1
 fi
 
