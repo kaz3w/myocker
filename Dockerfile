@@ -61,6 +61,10 @@ RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"]
 # COPY ./source/ .
 # RUN cmake .
 
+WORKDIR /usr/local/bin
+RUN set -x \
+ && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
+ && chmod a+x /usr/local/bin/repo
 
 RUN locale-gen
 RUN locale-gen en_US.UTF-8
@@ -118,10 +122,6 @@ RUN echo 'BB_NUMBER_THREADS = "8"' >> ${SRC_ROOT}/${BUILD_TARGET}/conf/local.con
  && echo 'PARALLEL_MAKE = "-j 8"' >> ${SRC_ROOT}/${BUILD_TARGET}/conf/local.conf
 
 
-WORKDIR /usr/local/bin
-RUN set -x \
- && curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo \
- && chmod a+x /usr/local/bin/repo
 
 # For derivation --->
 ENV USERNAME="build"
