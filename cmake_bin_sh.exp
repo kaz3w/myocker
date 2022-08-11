@@ -1,7 +1,6 @@
 #!/usr/bin/env expect
 
-spawn ./cmake-3.24.0-linux-x86_64.sh
-
+spawn ./cmake-3.24.0-linux-aarch64.sh
 
 expect {
     "More" { send "\n"; exp_continue; }
