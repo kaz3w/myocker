@@ -7,8 +7,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 # RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
 
 
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	debian-keyring \
 	git-all \
 	gawk \
@@ -54,8 +54,9 @@ RUN apt-get update \
 	rsync \
 	bison \
 	flex \
-	locales \
- && apt-get clean \
+	locales
+
+RUN apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt-file update
 
