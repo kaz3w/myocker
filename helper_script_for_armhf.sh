@@ -18,6 +18,7 @@ if [ "$architecture" = "armhf" ]; then
 
   wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null && \
   wget https://github.com/Kitware/CMake/releases/download/v3.24.0/cmake-3.24.0-linux-aarch64.sh && \
+  chmod a+x ./cmake-3.24.0-linux-aarch64.sh && \
   ./cmake-3.24.0-linux-aarch64.sh
 
   # apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main' && \
