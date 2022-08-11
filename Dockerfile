@@ -33,7 +33,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	libsdl1.2-dev \
 	pylint3 \
 	xterm \
-	libncurses5-dev \
 	wget \
 	build-essential \
 	cmake \
@@ -42,7 +41,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	expect \
 	autoconf \
 	libncurses5-dev \
-	lib32ncurses5-dev \
 	software-properties-common \
 	apt-file \
 	curl \
