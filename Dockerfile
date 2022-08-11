@@ -2,9 +2,9 @@ FROM ubuntu:18.04
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-WORKDIR /
-COPY ./helper_script_for_armhf.sh .
-RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
+# WORKDIR /
+# COPY ./helper_script_for_armhf.sh .
+# RUN ["/bin/bash", "-c", "./helper_script_for_armhf.sh"] 
 
 
 RUN apt-get update \
